@@ -27,7 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,11 +42,13 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "keycloak_api",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -131,6 +135,6 @@ REST_FRAMEWORK = {
     ),
 }
 
-KEYCLOAK_ISSUER = "http://localhost:8080/realms/ayam"
-KEYCLOAK_AUDIENCE = "public-client"
+KEYCLOAK_ISSUER = "http://myapp.local:8080/realms/dev_deployment"
+KEYCLOAK_AUDIENCE = "drf-api"
 KEYCLOAK_JWKS_URL = f"{KEYCLOAK_ISSUER}/protocol/openid-connect/certs"
