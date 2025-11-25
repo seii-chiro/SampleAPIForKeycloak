@@ -8,10 +8,13 @@ from django.conf import settings
 class KeycloakUser:
     """Simple user object for Keycloak-authenticated users"""
     
-    def __init__(self, username, roles, claims):
+    def __init__(self, username, given_name, family_name, email, roles, claims):
         self.username = username
+        self.given_name = given_name
+        self.family_name = family_name
         self.roles = roles
         self.claims = claims
+        self.email = email
         self.is_authenticated = True
         self.is_anonymous = False
     
@@ -64,6 +67,9 @@ class KeycloakAuthentication(authentication.BaseAuthentication):
         # Create a proper user object
         user = KeycloakUser(
             username=claims.get("preferred_username", "unknown"),
+            given_name=claims.get("given_name", ""),
+            family_name=claims.get("family_name", ""),
+            email=claims.get("email", ""),
             roles=claims.get("realm_access", {}).get("roles", []),
             claims=claims
         )
