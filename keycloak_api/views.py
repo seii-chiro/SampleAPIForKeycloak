@@ -145,5 +145,11 @@ class TestView(APIView):
         print(request.user)
 
         return Response(
-            {"user": request.user.username, "roles": getattr(request.user, "roles", [])}
+            {
+                "user": request.user.username, 
+                "roles": getattr(request.user, "roles", []),
+                "first_name": request.user.given_name,
+                "family_name": request.user.family_name,
+                "email": request.user.email,
+            }
         )
