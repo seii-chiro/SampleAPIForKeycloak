@@ -86,8 +86,16 @@ class KeycloakAuthentication(authentication.BaseAuthentication):
             if user.family_name != family_name:
                 user.family_name = family_name
                 updated = True
+            if user.roles != roles:
+                user.roles = roles
+                updated = True
 
             if updated:
+                user.save()
+        else:
+            # Ensure roles persisted on initial creation if field exists
+            if user.roles != roles:
+                user.roles = roles
                 user.save()
 
         # Attach Keycloak-specific data to the user object for use in views

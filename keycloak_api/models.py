@@ -27,6 +27,7 @@ class KeycloakUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(blank=True)
     given_name = models.CharField(max_length=150, blank=True)
     family_name = models.CharField(max_length=150, blank=True)
+    roles = models.JSONField(default=list, blank=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
