@@ -138,6 +138,8 @@ REST_FRAMEWORK = {
     ),
 }
 
+AUTH_USER_MODEL = 'keycloak_api.KeycloakUser'
+
 KEYCLOAK_ISSUER = "http://myapp.local:8080/realms/dev_deployment"
-KEYCLOAK_AUDIENCE = "drf-api"
+KEYCLOAK_AUDIENCE = "drf-api-local"
 KEYCLOAK_JWKS_URL = f"{KEYCLOAK_ISSUER}/protocol/openid-connect/certs"
