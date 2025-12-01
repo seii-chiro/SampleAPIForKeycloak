@@ -14,7 +14,7 @@ class HasRole(BasePermission):
         user_roles = getattr(request.user, 'roles', [])
         
         # Admins can access everything
-        if 'admin' in user_roles:
+        if 'Admin' in user_roles:
             return True
         
         # Get required roles from view

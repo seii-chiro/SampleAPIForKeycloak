@@ -15,6 +15,7 @@ class Patient(BaseModelWithAuditTrails):
     place_of_birth = models.CharField(max_length=255)
     office_of_assignment = models.CharField(max_length=255)
     rank = models.CharField(max_length=100)
+    patient_image = models.ImageField(upload_to="patient_images/", blank=True, null=True)
 
     def __str__(self):
         return f"Patient: {self.user.email}"
