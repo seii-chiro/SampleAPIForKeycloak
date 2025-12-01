@@ -7,6 +7,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .custom_permission import HasRole, IsAdmin
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.viewsets import ViewSet
+from .models import KeycloakUser
+from .serializers import KeycloakUserSerializer
 
 
 class LoginView(APIView):
@@ -154,6 +157,20 @@ class TestView(APIView):
                 "email": request.user.email,
             }
         )
+
+
+class UserViewset(ViewSet):
+    """ViewSet for user-related actions"""
+
+    permission_classes = [HasRole]
+    required_roles = ["Standard User"]
+
+    def list(self, request):
+        """List all users - admin only"""
+
+        users = KeycloakUser.objects.all()
+        serializer = KeycloakUserSerializer(users, many=True)
+        return Response(serializer.data)
 
 
 class AdminView(APIView):
