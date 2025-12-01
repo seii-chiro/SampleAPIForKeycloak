@@ -28,10 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "https://192.168.1.86"
-]
+CORS_ALLOWED_ORIGINS = ["http://localhost:5173", "https://192.168.1.86"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,8 +40,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework_simplejwt",
+    "core",
     "keycloak_api",
     "corsheaders",
+    "dental_records",
+    "dental_appointments",
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -124,7 +125,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -136,10 +137,17 @@ REST_FRAMEWORK = {
         "keycloak_api.keycloak.KeycloakAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
-AUTH_USER_MODEL = 'keycloak_api.KeycloakUser'
+AUTH_USER_MODEL = "keycloak_api.KeycloakUser"
 
 KEYCLOAK_ISSUER = "http://myapp.local:8080/realms/dev_deployment"
 KEYCLOAK_AUDIENCE = "drf-api-local"
 KEYCLOAK_JWKS_URL = f"{KEYCLOAK_ISSUER}/protocol/openid-connect/certs"
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Dental System API",
+    "DESCRIPTION": "API documentation for iDentist",
+    "VERSION": "1.0.0",
+}
