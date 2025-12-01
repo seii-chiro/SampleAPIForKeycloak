@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Patient, Dentist, MedicalRecord, Address
+from .models import Patient, Dentist, MedicalRecord
 
 
 @admin.register(Patient)
@@ -20,25 +20,7 @@ class DentistAdmin(admin.ModelAdmin):
 
 @admin.register(MedicalRecord)
 class MedicalRecordAdmin(admin.ModelAdmin):
-    list_display = ("patient", "date_recorded", "diagnosis", "barangay")
+    list_display = ("patient", "date_recorded", "diagnosis")
     search_fields = ("patient__user__username", "patient__user__email", "diagnosis")
     list_filter = ("date_recorded",)
     readonly_fields = ("date_recorded",)
-
-
-@admin.register(Address)
-class AddressAdmin(admin.ModelAdmin):
-    list_display = (
-        "patient",
-        "city_or_municipality",
-        "province",
-        "region",
-        "postal_code",
-    )
-    search_fields = (
-        "patient__user__username",
-        "patient__user__email",
-        "city_or_municipality",
-        "province",
-    )
-    list_filter = ("region", "province")
