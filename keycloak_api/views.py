@@ -3,9 +3,10 @@ from urllib.parse import urlencode
 from django.conf import settings
 from django.shortcuts import redirect
 from django.http import JsonResponse
-from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from .custom_permission import HasRole, IsAdmin
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 class LoginView(APIView):
@@ -146,10 +147,32 @@ class TestView(APIView):
 
         return Response(
             {
-                "user": request.user.username, 
+                "user": request.user.username,
                 "roles": getattr(request.user, "roles", []),
                 "first_name": request.user.given_name,
                 "family_name": request.user.family_name,
                 "email": request.user.email,
             }
         )
+
+
+class AdminView(APIView):
+    """Admin-only endpoint"""
+
+    permission_classes = [IsAdmin]
+
+    def get(self, request):
+        if "Admin" not in getattr(request.user, "roles", []):
+            return Response({"error": "Forbidden"}, status=403)
+
+        return Response({"message": "Welcome, admin!"})
+
+
+class StandardUserView(APIView):
+    """Endpoint accessible to users with 'user' role"""
+
+    permission_classes = [HasRole]
+    required_roles = ["Standard User"]
+
+    def get(self, request):
+        return Response({"message": "Hello, standard user!"})
