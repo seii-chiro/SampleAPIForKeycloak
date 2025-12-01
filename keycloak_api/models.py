@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
@@ -7,18 +8,34 @@ from django.contrib.auth.models import (
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, keycloak_id, username, email, **extra_fields):
-        if not keycloak_id:
-            raise ValueError("The Keycloak ID must be set")
+    def create_user(self, username, email=None, password=None, **extra_fields):
+        keycloak_id = extra_fields.pop("keycloak_id", None) or str(uuid.uuid4())
+        email = self.normalize_email(email) if email else ""
 
         user = self.model(
             keycloak_id=keycloak_id,
             username=username,
-            email=self.normalize_email(email) if email else "",
+            email=email,
             **extra_fields,
         )
+        if password:
+            user.set_password(password)
+        else:
+            user.set_unusable_password()
         user.save(using=self._db)
         return user
+
+    def create_superuser(self, username, email=None, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
+
+        return self.create_user(username, email=email, password=password, **extra_fields)
 
 
 class KeycloakUser(AbstractBaseUser, PermissionsMixin):
@@ -38,7 +55,7 @@ class KeycloakUser(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["keycloak_id"]
+    REQUIRED_FIELDS = []
 
     class Meta:
         db_table = "users"
