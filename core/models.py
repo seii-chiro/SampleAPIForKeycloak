@@ -24,9 +24,25 @@ class BaseModelWithAuditTrails(models.Model):
         abstract = True
 
 
-class Gender(models.Model):
+class Gender(BaseModelWithAuditTrails):
     gender = models.CharField(max_length=50, unique=True)
     description = models.TextField(blank=True)
 
     def __str__(self):
         return self.gender
+
+
+class Address(BaseModelWithAuditTrails):
+    patient = models.OneToOneField(
+        "dental_records.Patient", on_delete=models.CASCADE, related_name="address"
+    )
+    region = models.CharField(max_length=255)
+    province = models.CharField(max_length=255)
+    city_or_municipality = models.CharField(max_length=255)
+    barangay = models.CharField(max_length=255)
+    street = models.CharField(max_length=255)
+    postal_code = models.CharField(max_length=20)
+
+    @property
+    def full_address(self):
+        return f"{self.street}, {self.barangay}, {self.city_or_municipality}, {self.province}, {self.region} {self.postal_code}"
