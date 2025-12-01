@@ -34,4 +34,4 @@ class IsAdmin(BasePermission):
             return False
         
         user_roles = getattr(request.user, 'roles', [])
-        return 'admin' in user_roles
+        return 'Admin' in user_roles
