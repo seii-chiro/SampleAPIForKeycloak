@@ -34,4 +34,5 @@ urlpatterns = [
     path("api/", include("core.urls"), name="core"),
     path("api/", include("dental_records.urls"), name="dental_records"),
     path("api/", include("dental_appointments.urls"), name="dental_appointments"),
+    path("silk/", include("silk.urls", namespace="silk")),
 ]

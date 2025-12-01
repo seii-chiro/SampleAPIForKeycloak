@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import (
+    MeViewset,
     TestView,
     LoginView,
     CallbackView,
@@ -13,6 +14,7 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r"users", UserViewset, basename="user")
+router.register(r"me", MeViewset, basename="me")
 
 urlpatterns = [
     path("test/", TestView.as_view(), name="test"),
