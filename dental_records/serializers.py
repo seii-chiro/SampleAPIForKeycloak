@@ -8,6 +8,7 @@ from core.serializers import BaseModelWithAuditTrailsSerializer, AddressSerializ
 class PatientSerializer(BaseModelWithAuditTrailsSerializer):
     user = KeycloakUserSerializer(read_only=True)
     address = AddressSerializer(read_only=True)
+    gender_display = serializers.StringRelatedField(source='gender', read_only=True)
 
     class Meta:
         model = Patient
@@ -29,6 +30,7 @@ class PatientSerializer(BaseModelWithAuditTrailsSerializer):
 
 class DentistSerializer(BaseModelWithAuditTrailsSerializer):
     user = KeycloakUserSerializer(read_only=True)
+    gender_display = serializers.StringRelatedField(source='gender', read_only=True)
 
     class Meta:
         model = Dentist
