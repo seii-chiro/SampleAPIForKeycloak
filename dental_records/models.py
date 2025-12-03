@@ -27,6 +27,7 @@ class Dentist(BaseModelWithAuditTrails):
     )
     gender = models.ForeignKey("core.Gender", on_delete=models.SET_NULL, null=True)
     rank = models.CharField(max_length=100)
+    dentist_image = models.ImageField(upload_to="dentist_images/", blank=True, null=True)
 
     def __str__(self):
         return f"Dentist: {self.user.email}"
