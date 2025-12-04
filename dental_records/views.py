@@ -15,7 +15,7 @@ User = get_user_model()
 
 # Create your views here.
 class PatientViewSet(ModelViewSet):
-    queryset = Patient.objects.select_related("user").prefetch_related("address")
+    queryset = Patient.objects.select_related("user", "gender").prefetch_related("address")
     serializer_class = PatientSerializer
     permission_classes = [HasRole]
     required_roles = ["Standard User"]
@@ -28,7 +28,7 @@ class PatientViewSet(ModelViewSet):
 
 
 class DentistViewSet(ModelViewSet):
-    queryset = Dentist.objects.select_related("user")
+    queryset = Dentist.objects.select_related("user", "gender")
     serializer_class = DentistSerializer
     permission_classes = [HasRole]
     required_roles = ["Standard User"]

@@ -183,7 +183,10 @@ class MeViewset(ViewSet):
         """List all users - admin only"""
 
         users = KeycloakUser.objects.select_related(
-            "patient_profile", "dentist_profile"
+            "patient_profile",
+            "dentist_profile",
+            "patient_profile__gender",
+            "dentist_profile__gender",
         ).filter(keycloak_id=request.user.keycloak_id)
         serializer = MeSerializer(users, many=True)
         return Response(serializer.data)
