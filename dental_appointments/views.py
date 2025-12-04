@@ -8,7 +8,14 @@ from .serializers import DentalAppointmentSerializer, DentalAppointmentStatusSer
 # Create your views here.
 class DentalAppointmentViewSet(ModelViewSet):
     queryset = DentalAppointment.objects.select_related(
-        "dentist", "patient", "appointment_status"
+        "dentist",
+        "dentist__user",
+        "dentist__gender",
+        "patient",
+        "patient__user",
+        "patient__gender",
+        "patient__address",
+        "appointment_status",
     )
     serializer_class = DentalAppointmentSerializer
 
