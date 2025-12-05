@@ -116,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Manila"
 
 USE_I18N = True
 
@@ -147,7 +147,7 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = "keycloak_api.KeycloakUser"
 
-KEYCLOAK_ISSUER = "http://myapp.local:8080/realms/dev_deployment"
+KEYCLOAK_ISSUER = "http://keycloak.local:8080/realms/dev_deployment"
 KEYCLOAK_AUDIENCE = "drf-api-local"
 KEYCLOAK_JWKS_URL = f"{KEYCLOAK_ISSUER}/protocol/openid-connect/certs"
 

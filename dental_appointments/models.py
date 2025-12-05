@@ -17,7 +17,11 @@ class DentalAppointmentStatus(BaseModelWithAuditTrails):
 
 class DentalAppointment(BaseModelWithAuditTrails):
     dentist = models.ForeignKey(
-        Dentist, on_delete=models.CASCADE, related_name="appointments"
+        Dentist,
+        on_delete=models.SET_NULL,
+        related_name="appointments",
+        null=True,
+        blank=True,
     )
     patient = models.ForeignKey(
         Patient, on_delete=models.CASCADE, related_name="appointments"
@@ -28,9 +32,10 @@ class DentalAppointment(BaseModelWithAuditTrails):
 
     appointment_status = models.ForeignKey(
         DentalAppointmentStatus,
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_DEFAULT,
         null=True,
         related_name="appointment_status",
+        default=1,
     )
 
     created_at = models.DateTimeField(auto_now_add=True)

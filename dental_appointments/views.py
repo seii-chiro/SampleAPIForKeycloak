@@ -1,5 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny
+from django.db.models import Q
 from keycloak_api.custom_permission import HasRole, IsAdmin
 from .models import DentalAppointment, DentalAppointmentStatus
 from .serializers import DentalAppointmentSerializer, DentalAppointmentStatusSerializer
@@ -21,6 +22,21 @@ class DentalAppointmentViewSet(ModelViewSet):
 
     permission_classes = [HasRole]
     required_roles = ["Standard User"]
+
+    def get_queryset(self):
+        """Filter appointments by user role."""
+        queryset = super().get_queryset()
+        user = self.request.user
+        user_roles = getattr(user, 'roles', [])
+        
+        # Admin users see all appointments
+        if 'Admin' in user_roles:
+            return queryset
+        
+        # Standard users see only appointments for their patient or dentist profile
+        return queryset.filter(
+            Q(patient__user=user) | Q(dentist__user=user)
+        )
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
